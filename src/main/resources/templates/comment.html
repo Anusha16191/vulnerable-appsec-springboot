@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>User Comments (Vulnerable XSS)</h2>
+
+<form method="post" action="/comment">
+    <textarea name="comment" rows="4" cols="60"></textarea>
+    <br/><br/>
+    <button type="submit">Submit</button>
+</form>
+
+<hr/>
+
+<div>
+    <p th:utext="${comment}"></p>
+</div>
+
+</body>
+</html>

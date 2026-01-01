@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Profile Upload (Vulnerable Deserialization)</h2>
+
+<form method="post" action="/deserialize">
+    <textarea name="data" rows="6" cols="60"
+              placeholder="Paste Base64 serialized object here"></textarea>
+    <br/><br/>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

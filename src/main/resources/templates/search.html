@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>User Search (Vulnerable)</h2>
+
+<form method="get" action="/search">
+    Username:
+    <input type="text" name="username"/>
+    <button type="submit">Search</button>
+</form>
+
+<div>
+    <p th:each="user : ${users}">
+        Username: <span th:text="${user.username}"></span>
+    </p>
+</div>
+
+</body>
+</html>

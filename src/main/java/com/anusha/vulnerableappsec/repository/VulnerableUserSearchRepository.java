@@ -13,13 +13,14 @@ public class VulnerableUserSearchRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // ❌ SQL Injection vulnerable method
+    //  SQL Injection prevented
     public List<User> searchByUsername(String username) {
 
-        String sql = "SELECT * FROM USERS WHERE USERNAME = '" + username + "'";
+        String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
 
         return entityManager
                 .createNativeQuery(sql, User.class)
+                .setParameter(1, username)
                 .getResultList();
     }
 }

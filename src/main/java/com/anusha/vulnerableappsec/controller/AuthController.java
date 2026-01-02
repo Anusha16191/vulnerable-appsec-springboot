@@ -5,6 +5,7 @@ import com.anusha.vulnerableappsec.repository.UserRepository;
 import com.anusha.vulnerableappsec.repository.VulnerableUserSearchRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,14 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private VulnerableUserSearchRepository vulnerableUserSearchRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    // ❌ VULNERABLE LOGIN
     @PostMapping("/login")
     public String doLogin(
             @RequestParam String username,
@@ -37,12 +39,9 @@ public class AuthController {
         User user = userRepository.findByUsername(username);
         System.out.println("LOGIN ATTEMPT -> username=" + username + ", password=" + password);
 
-        // ❌ Plain-text password comparison
-        if (user != null && user.getPassword().equals(password)) {
-            // ❌ Weak session handling
-            System.out.println("LOGIN SUCCESS for " + username);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             session.setAttribute("user", user);
-            return "dashboard";
+            return "redirect:/dashboard";
         }
         System.out.println("LOGIN FAILED");
         return "login";

@@ -114,9 +114,15 @@ public class AuthController {
     @GetMapping("/admin")
     public String adminPage(HttpSession session) {
 
-        // ❌ Only checks login, no role validation
-        if (session.getAttribute("user") == null) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
             return "redirect:/login";
+        }
+
+        //  Role-based access control
+        if (!"ADMIN".equals(user.getRole())) {
+            return "redirect:/dashboard";
         }
 
         return "admin";

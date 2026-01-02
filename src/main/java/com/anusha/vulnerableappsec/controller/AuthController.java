@@ -111,6 +111,17 @@ public class AuthController {
 
         return "comment";
     }
+    @GetMapping("/admin")
+    public String adminPage(HttpSession session) {
+
+        // ❌ Only checks login, no role validation
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        return "admin";
+    }
+
 
 
 }

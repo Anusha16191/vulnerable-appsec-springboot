@@ -75,25 +75,8 @@ public class AuthController {
     public String deserializeObject(
             @RequestParam String data,
             org.springframework.ui.Model model) {
-        System.out.println("DESERIALIZE ENDPOINT HIT");
-
-        try {
-            byte[] decoded = Base64.getDecoder().decode(data);
-
-            ObjectInputStream ois =
-                    new ObjectInputStream(new ByteArrayInputStream(decoded));
-
-            // ❌ INSECURE DESERIALIZATION
-            Object obj = ois.readObject();
-            System.out.println("DESERIALIZED CLASS: " + obj.getClass().getName());
-
-
-            model.addAttribute("result", obj.toString());
-
-        } catch (Exception e) {
-            model.addAttribute("result", "Error during deserialization");
-        }
-
+        // ✅ Secure handling: do NOT deserialize untrusted input
+        model.addAttribute("result", "Deserialization of user input is disabled for security reasons");
         return "deserialize";
     }
     @GetMapping("/comment")

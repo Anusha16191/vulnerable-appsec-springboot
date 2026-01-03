@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.util.Base64;
 
 @Controller
 public class AuthController {
@@ -37,7 +34,7 @@ public class AuthController {
             HttpSession session) {
 
         User user = userRepository.findByUsername(username);
-        System.out.println("LOGIN ATTEMPT -> username=" + username + ", password=" + password);
+        System.out.println("Login attempt for username=" + username);
 
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             session.setAttribute("user", user);
@@ -75,7 +72,6 @@ public class AuthController {
     public String deserializeObject(
             @RequestParam String data,
             org.springframework.ui.Model model) {
-        // ✅ Secure handling: do NOT deserialize untrusted input
         model.addAttribute("result", "Deserialization of user input is disabled for security reasons");
         return "deserialize";
     }
@@ -89,7 +85,6 @@ public class AuthController {
             @RequestParam String comment,
             org.springframework.ui.Model model) {
 
-        // ❌ Directly reflecting user input
         model.addAttribute("comment", comment);
 
         return "comment";
@@ -103,7 +98,6 @@ public class AuthController {
             return "redirect:/login";
         }
 
-        //  Role-based access control
         if (!"ADMIN".equals(user.getRole())) {
             return "redirect:/dashboard";
         }
